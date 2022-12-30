@@ -73,7 +73,7 @@ public class ControllerImpl implements Controller {
         }
 
         field.addSupplement(supplement);
-        return String.format(SUCCESSFULLY_ADDED_SUPPLEMENT_IN_FIELD, supplementType);
+        return String.format(SUCCESSFULLY_ADDED_SUPPLEMENT_IN_FIELD, supplementType, fieldName);
     }
 
     @Override
@@ -124,17 +124,22 @@ public class ControllerImpl implements Controller {
                 .filter(f -> f.getName().equals(fieldName))
                 .findFirst().orElse(null);
         int sumStrength = 0;
-        for (Player p : field.getPlayer()) {
+        for (Player p : field.getPlayers()) {
             sumStrength += p.getStrength();
         }
 
         return String.format(STRENGTH_FIELD, fieldName, sumStrength);
     }
 
-}
+
 
     @Override
     public String getStatistics() {
-        return null;
+        StringBuilder sb=new StringBuilder();
+        for (Field field : this.fields) {
+            sb.append(field.getInfo());
+            sb.append(System.lineSeparator());
+        }
+        return sb.toString().trim();
     }
 }

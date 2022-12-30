@@ -71,36 +71,31 @@ public class EngineImpl implements Engine{
     }
     private String addField(String[] data) {
         //TODO
-        return null;
+        return controller.addField(data[0], data[1]);
     }
 
     private String deliverySupplement(String[] data) {
-        //TODO
-        return null;
+        return controller.deliverySupplement(data[0]);
     }
 
     private String supplementForField(String[] data) {
-         //TODO
-        return null;
+        return controller.supplementForField(data[0],data[1]);
     }
 
     private String addPlayer(String[] data) {
-        //TODO
-        return null;
+        return controller.addPlayer(data[0], data[1],data[2],data[3], Integer.parseInt(data[4]));
     }
 
     private String dragPlayer(String[] data) {
-        //TODO
-        return null;
+
+        return controller.dragPlayer(data[0]);
     }
 
     private String calculateStrength(String[] data) {
-        //TODO
-        return null;
+        return controller.calculateStrength(data[0]);
     }
 
     private String getStatistics() {
-        //TODO
-        return null;
+        return controller.getStatistics();
     }
 }

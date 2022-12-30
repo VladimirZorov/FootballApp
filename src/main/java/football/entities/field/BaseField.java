@@ -5,6 +5,10 @@ import football.entities.supplement.Supplement;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
+
+import static football.common.ConstantMessages.NOT_ENOUGH_CAPACITY;
+import static football.common.ExceptionMessages.FIELD_NAME_NULL_OR_EMPTY;
 
 public abstract class BaseField implements Field{
 
@@ -14,54 +18,75 @@ public abstract class BaseField implements Field{
    private Collection<Player> players;
 
     public BaseField(String name, int capacity) {
-        this.name = name;
+        setName(name);
         this.capacity = capacity;
         this.supplements = new ArrayList<>();
         this.players = new ArrayList<>();
     }
 
+    public void setName(String name){
+        if (name==null || name.trim().isEmpty()){
+            throw new NullPointerException(FIELD_NAME_NULL_OR_EMPTY);
+        }
+        this.name=name;
+    }
+
     @Override
     public int sumEnergy() {
-        return 0;
+
+        int sumE = supplements.stream().mapToInt(Supplement::getEnergy).sum();
+
+        return sumE;
     }
 
     @Override
     public void addPlayer(Player player) {
-
+        if (players.size() == capacity) {
+            throw new IllegalStateException(NOT_ENOUGH_CAPACITY);
+        }
+        this.players.add(player);
     }
 
     @Override
     public void removePlayer(Player player) {
-
+        this.players.remove(player);
     }
 
     @Override
     public void addSupplement(Supplement supplement) {
-
+        supplements.add(supplement);
     }
 
     @Override
     public void drag() {
-
+        players.forEach(Player::stimulation);
     }
 
     @Override
     public String getInfo() {
-        return null;
+        String playerOutput = players.isEmpty()
+                ? "none"
+                : players.stream().map(Player::getName).collect(Collectors.joining(" "));
+
+        return String.format("%s (%s):%n" +
+                "Player: %s%n" +
+                "Supplement: %d%n" +
+                "Energy: %d",name, this.getClass().getSimpleName(), supplements.size(), sumEnergy());
+
     }
 
     @Override
     public Collection<Player> getPlayers() {
-        return null;
+        return players;
     }
 
     @Override
     public Collection<Supplement> getSupplements() {
-        return null;
+        return supplements;
     }
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 }
